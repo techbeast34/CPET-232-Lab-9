@@ -1,0 +1,176 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+ENTITY shifter IS
+	PORT(
+		enable	:IN STD_LOGIC;
+		clk		:IN STD_LOGIC;
+		reset_n	:IN STD_LOGIC;
+		HEX0, HEX1, HEX2, HEX3, HEX4, HEX5	:OUT STD_LOGIC_VECTOR(6 DOWNTO 0));
+END shifter;
+
+ARCHITECTURE model OF shifter IS
+											   --6543210
+	CONSTANT a :STD_LOGIC_VECTOR(6 DOWNTO 0) := "0001000";
+	CONSTANT b :STD_LOGIC_VECTOR(6 DOWNTO 0) := "0000011";
+	CONSTANT c :STD_LOGIC_VECTOR(6 DOWNTO 0) := "1000110";
+	CONSTANT d :STD_LOGIC_VECTOR(6 DOWNTO 0) := "0100001";
+	CONSTANT e :STD_LOGIC_VECTOR(6 DOWNTO 0) := "0000110";
+	CONSTANT f :STD_LOGIC_VECTOR(6 DOWNTO 0) := "0001110";
+	CONSTANT g :STD_LOGIC_VECTOR(6 DOWNTO 0) := "1000010";
+	CONSTANT h :STD_LOGIC_VECTOR(6 DOWNTO 0) := "0001011";
+	CONSTANT i :STD_LOGIC_VECTOR(6 DOWNTO 0) := "1001111";
+	CONSTANT j :STD_LOGIC_VECTOR(6 DOWNTO 0) := "1100001";
+	CONSTANT l :STD_LOGIC_VECTOR(6 DOWNTO 0) := "1000111";
+	CONSTANT n :STD_LOGIC_VECTOR(6 DOWNTO 0) := "0101011";
+	CONSTANT o :STD_LOGIC_VECTOR(6 DOWNTO 0) := "0100011";
+	CONSTANT p :STD_LOGIC_VECTOR(6 DOWNTO 0) := "0001100";
+	CONSTANT q :STD_LOGIC_VECTOR(6 DOWNTO 0) := "0011000";
+	CONSTANT r :STD_LOGIC_VECTOR(6 DOWNTO 0) := "0101111";
+	CONSTANT s :STD_LOGIC_VECTOR(6 DOWNTO 0) := "0010010";
+	CONSTANT t :STD_LOGIC_VECTOR(6 DOWNTO 0) := "0000111";
+	CONSTANT u :STD_LOGIC_VECTOR(6 DOWNTO 0) := "1100011";
+	CONSTANT y :STD_LOGIC_VECTOR(6 DOWNTO 0) := "0010001";
+	CONSTANT bl :STD_LOGIC_VECTOR(6 DOWNTO 0) := "1111111";
+
+	SIGNAL reg :STD_LOGIC_VECTOR(11 DOWNTO 0) := "100000000000";
+	
+	TYPE t_words IS ARRAY (55 DOWNTO 0) OF STD_LOGIC_VECTOR(6 DOWNTO 0);
+	SIGNAL r_words : t_words :=(t, h, e, r, e, s,
+								a,bl,
+								s, p, i, d, e, r,
+								i, n,bl,
+								t, h, e,bl,
+								b, a, n, a, n, a,
+								r, u, n,bl,
+								a, n, d,bl,
+								b, u, r, n,bl,
+								t, h, e,bl,
+								h, o, u, s, e,bl,
+								r, e, e, e, e, e);
+	SIGNAL r_disp : t_words 
+	
+BEGIN
+	shift : PROCESS(enable, reg, clk, reset_n)
+	BEGIN
+		IF(reset_n = '0') THEN
+			reg <= "100000000000";
+		ELSE
+			IF(enable = '1') THEN
+				IF(rising_edge(clk)) THEN
+					reg(10) <= reg(11);
+					reg(9) <= reg(10);
+					reg(8) <= reg(9);
+					reg(7) <= reg(8);
+					reg(6) <= reg(7);
+					reg(5) <= reg(6);
+					reg(4) <= reg(5);
+					reg(3) <= reg(4);
+					reg(2) <= reg(3);
+					reg(1) <= reg(2);
+					reg(0) <= reg(1);
+					reg(11) <= reg(0);
+					
+					r_disp(0) <= r_words(55);
+					
+					for i in 55 DOWNTO 0 loop
+						r_words(i) <= r_words(i-1);
+					end loop;
+					
+				END IF;
+			END IF;
+		END IF;
+	END PROCESS;
+		
+		
+		
+		
+	PROCESS(reg, clk, r_words)
+		BEGIN
+			CASE reg IS
+				WHEN "100000000000" =>
+					r_disp(5) <= r_disp(4);
+					r_disp(4) <= r_disp(3);
+					r_disp(3) <= r_disp(2);
+					r_disp(2) <= r_disp(1);
+					r_disp(1) <= r_disp(0);
+				WHEN "010000000000" =>
+					r_disp(5) <= r_disp(4);
+					r_disp(4) <= r_disp(3);
+					r_disp(3) <= r_disp(2);
+					r_disp(2) <= r_disp(1);
+					r_disp(1) <= r_disp(0);
+				WHEN "001000000000" =>
+					r_disp(5) <= r_disp(4);
+					r_disp(4) <= r_disp(3);
+					r_disp(3) <= r_disp(2);
+					r_disp(2) <= r_disp(1);
+					r_disp(1) <= r_disp(0);
+				WHEN "000100000000" =>
+					r_disp(5) <= r_disp(4);
+					r_disp(4) <= r_disp(3);
+					r_disp(3) <= r_disp(2);
+					r_disp(2) <= r_disp(1);
+					r_disp(1) <= r_disp(0);
+				WHEN "000010000000" =>
+					r_disp(5) <= r_disp(4);
+					r_disp(4) <= r_disp(3);
+					r_disp(3) <= r_disp(2);
+					r_disp(2) <= r_disp(1);
+					r_disp(1) <= r_disp(0);
+				WHEN "000001000000" =>
+					r_disp(5) <= r_disp(4);
+					r_disp(4) <= r_disp(3);
+					r_disp(3) <= r_disp(2);
+					r_disp(2) <= r_disp(1);
+					r_disp(1) <= r_disp(0);
+				WHEN "000000100000" =>
+					r_disp(5) <= r_disp(4);
+					r_disp(4) <= r_disp(3);
+					r_disp(3) <= r_disp(2);
+					r_disp(2) <= r_disp(1);
+					r_disp(1) <= r_disp(0);
+				WHEN "000000010000" =>
+					r_disp(5) <= r_disp(4);
+					r_disp(4) <= r_disp(3);
+					r_disp(3) <= r_disp(2);
+					r_disp(2) <= r_disp(1);
+					r_disp(1) <= r_disp(0);
+				WHEN "000000001000" =>
+					r_disp(5) <= r_disp(4);
+					r_disp(4) <= r_disp(3);
+					r_disp(3) <= r_disp(2);
+					r_disp(2) <= r_disp(1);
+					r_disp(1) <= r_disp(0);
+				WHEN "000000000100" =>
+					r_disp(5) <= r_disp(4);
+					r_disp(4) <= r_disp(3);
+					r_disp(3) <= r_disp(2);
+					r_disp(2) <= r_disp(1);
+					r_disp(1) <= r_disp(0);
+				WHEN "000000000010" =>
+					r_disp(5) <= r_disp(4);
+					r_disp(4) <= r_disp(3);
+					r_disp(3) <= r_disp(2);
+					r_disp(2) <= r_disp(1);
+					r_disp(1) <= r_disp(0);
+				WHEN "000000000001" =>
+					r_disp(5) <= r_disp(4);
+					r_disp(4) <= r_disp(3);
+					r_disp(3) <= r_disp(2);
+					r_disp(2) <= r_disp(1);
+					r_disp(1) <= r_disp(0);
+				WHEN OTHERS =>
+					r_disp <= (bl, bl, bl, bl, bl, bl);
+			END CASE;
+	END PROCESS;
+	
+	HEX0 <= r_disp(0);
+	HEX1 <= r_disp(1);
+	HEX2 <= r_disp(2);
+	HEX3 <= r_disp(3);
+	HEX4 <= r_disp(4);
+	HEX5 <= r_disp(5);
+
+END model;
